@@ -183,7 +183,7 @@ var App = function (_React$Component5) {
             React.createElement(
               "label",
               null,
-              "Monthly expences: "
+              "Monthly expenses: "
             )
           ),
           React.createElement(
