@@ -1,0 +1,123 @@
+class Ticker extends React.Component {
+  render() {
+    return (
+      <h1>{parseFloat(Math.round(this.props.counter) / 100).toFixed(2)} {this.props.currency}</h1>
+    );
+  }
+}
+
+class MonthlyInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  
+  handleChange(e) {
+    this.props.onMonthlyChange(e.target.value);
+  }
+  
+  render() {
+    return (
+    <input type="number" value={this.props.monthly} onChange={this.handleChange} />
+    );
+  }
+}
+
+class CurrencyInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  
+  handleChange(e) {
+    this.props.onCurrencyChange(e.target.value);
+  }
+  
+  render() {
+    return (
+    <input type="text" size="5" value={this.props.currency} onChange={this.handleChange}/>
+    );
+  }
+}
+
+class ResetButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.props.onClick();
+  }
+
+  render() {
+    return (
+      <button onClick={this.handleClick}>
+        Reset
+      </button>
+    );
+  }
+}
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {counter: 0, currency: "p", monthly: 150000};
+    this.incr = this.state.monthly * 100 / 30.4 / 24 / 60 / 60;
+    this.handleReset = this.handleReset.bind(this);
+    this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
+    this.handleMonthlyChange = this.handleMonthlyChange.bind(this);
+  }
+  
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000/this.incr
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+  
+  handleReset() {
+    this.setState({counter: 0});
+  }
+
+  handleCurrencyChange(currency) {
+    this.setState({currency: currency});
+  }
+  
+  handleMonthlyChange(monthly) {
+    this.setState({monthly: monthly});
+    this.incr = monthly * 100 / 30.4 / 24 / 60 / 60;
+    clearInterval(this.timerID);
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000/this.incr
+    );
+  }
+  
+  tick() {
+    this.setState((prevState) => ({
+      counter: prevState.counter + 1
+    }));
+  }
+  
+  render() {
+    return (
+      <div class="center-div">
+        <Ticker monthly={this.state.monthly} counter={this.state.counter} currency={this.state.currency}/>
+        <span>Ежемесячные расходы: </span>
+        <MonthlyInput monthly={this.state.monthly} onMonthlyChange={this.handleMonthlyChange} />
+        <CurrencyInput currency={this.state.currency} onCurrencyChange={this.handleCurrencyChange} />
+        <ResetButton onClick={this.handleReset}/>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <App/>,
+  document.getElementById('root')
+);
