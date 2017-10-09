@@ -40,12 +40,15 @@ var MonthlyInput = function (_React$Component2) {
     return _this2;
   }
 
-  MonthlyInput.prototype.handleChange = function handleChange(e) {
-    this.props.onMonthlyChange(e.target.value);
+  MonthlyInput.prototype.handleChange = function handleChange(e, values) {
+    var formattedValue = values.formattedValue;
+    var value = values.value;
+
+    this.props.onMonthlyChange(value);
   };
 
   MonthlyInput.prototype.render = function render() {
-    return React.createElement("input", { type: "number", value: this.props.monthly, onChange: this.handleChange });
+    return React.createElement(NumberFormat, { thousandSeparator: true, thousandSeparator: ' ', value: this.props.monthly, onChange: this.handleChange });
   };
 
   return MonthlyInput;
@@ -86,14 +89,15 @@ var ResetButton = function (_React$Component4) {
     return _this4;
   }
 
-  ResetButton.prototype.handleClick = function handleClick() {
+  ResetButton.prototype.handleClick = function handleClick(e) {
     this.props.onClick();
+    e.preventDefault();
   };
 
   ResetButton.prototype.render = function render() {
     return React.createElement(
-      "button",
-      { onClick: this.handleClick },
+      "a",
+      { "class": "waves-effect waves-light btn", onClick: this.handleClick },
       "Reset"
     );
   };
@@ -109,7 +113,9 @@ var App = function (_React$Component5) {
 
     var _this5 = _possibleConstructorReturn(this, _React$Component5.call(this, props));
 
-    _this5.state = { counter: 0, currency: "p", monthly: 150000 };
+    _this5.state = { counter: 0, currency: "$", monthly: 7500, pow: 1 };
+    var pow = Math.pow(10, _this5.state.monthly.length - 6);
+    _this5.setState({ pow: pow });
     _this5.incr = _this5.state.monthly * 100 / 30.4 / 24 / 60 / 60;
     _this5.handleReset = _this5.handleReset.bind(_this5);
     _this5.handleCurrencyChange = _this5.handleCurrencyChange.bind(_this5);
@@ -141,7 +147,9 @@ var App = function (_React$Component5) {
     var _this7 = this;
 
     this.setState({ monthly: monthly });
-    this.incr = monthly * 100 / 30.4 / 24 / 60 / 60;
+    var pow = monthly.length < 7 ? 1 : Math.pow(10, monthly.length - 7);
+    this.setState({ pow: pow });
+    this.incr = monthly * 100 / 30.4 / 24 / 60 / 60 / pow;
     clearInterval(this.timerID);
     this.timerID = setInterval(function () {
       return _this7.tick();
@@ -149,9 +157,11 @@ var App = function (_React$Component5) {
   };
 
   App.prototype.tick = function tick() {
+    var _this8 = this;
+
     this.setState(function (prevState) {
       return {
-        counter: prevState.counter + 1
+        counter: prevState.counter + 1 * _this8.state.pow
       };
     });
   };
@@ -162,13 +172,37 @@ var App = function (_React$Component5) {
       { "class": "center-div" },
       React.createElement(Ticker, { monthly: this.state.monthly, counter: this.state.counter, currency: this.state.currency }),
       React.createElement(
-        "span",
-        null,
-        "Ежемесячные расходы: "
-      ),
-      React.createElement(MonthlyInput, { monthly: this.state.monthly, onMonthlyChange: this.handleMonthlyChange }),
-      React.createElement(CurrencyInput, { currency: this.state.currency, onCurrencyChange: this.handleCurrencyChange }),
-      React.createElement(ResetButton, { onClick: this.handleReset })
+        "div",
+        { "class": "row inputs" },
+        React.createElement(
+          "form",
+          { "class": "col s12" },
+          React.createElement(
+            "div",
+            { "class": "input-field col s4 labeldiv" },
+            React.createElement(
+              "label",
+              null,
+              "Monthly expences: "
+            )
+          ),
+          React.createElement(
+            "div",
+            { "class": "input-field col s3" },
+            React.createElement(MonthlyInput, { monthly: this.state.monthly, onMonthlyChange: this.handleMonthlyChange })
+          ),
+          React.createElement(
+            "div",
+            { "class": "input-field col s2" },
+            React.createElement(CurrencyInput, { currency: this.state.currency, onCurrencyChange: this.handleCurrencyChange })
+          ),
+          React.createElement(
+            "div",
+            { "class": "input-field col s3 buttondiv" },
+            React.createElement(ResetButton, { onClick: this.handleReset })
+          )
+        )
+      )
     );
   };
 

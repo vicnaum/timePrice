@@ -1,37 +1,38 @@
-.vic
-{
-  font-family: 'Exo', sans-serif;
-  font-family: 'Oswald', sans-serif;
-}
-
 body
 {
   background-color: #eee;
 }
 
-h1
+.input-field.col label
 {
-  font-family: 'Roboto Slab', sans;
-  font-size: 75px;
+  font-size: 16pt;
+  line-height: 23pt;
+  vertical-align: bottom;
 }
 
-input[type="number"]
+h1
 {
-  width: 100px;
+  line-height: 10rem;
+}
+
+
+
+input[type=number]
+{
+  padding-left: 0.5em;
+  font-size: 18pt;
+}
+
+input[type=text]
+{
+  padding-left: 0.5em;
+  margin-right: 0;
+  font-size: 18pt;
 }
 
 .center-div
 {
-  position: absolute;
-  margin: auto;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 500px;
-  height: 250px;
   background-color: #fff;
   border-radius: 5px;
-  text-align: center;
-  vertical-align: middle;
+  padding-left: 1em;
 }

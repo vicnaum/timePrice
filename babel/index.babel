@@ -12,13 +12,14 @@ class MonthlyInput extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
   
-  handleChange(e) {
-    this.props.onMonthlyChange(e.target.value);
+  handleChange(e, values) {
+    const {formattedValue, value} = values;
+    this.props.onMonthlyChange(value);
   }
   
   render() {
     return (
-    <input type="number" value={this.props.monthly} onChange={this.handleChange} />
+    <NumberFormat thousandSeparator={true} thousandSeparator={' '} value={this.props.monthly} onChange={this.handleChange}/>
     );
   }
 }
@@ -46,15 +47,14 @@ class ResetButton extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
+  handleClick(e) {
     this.props.onClick();
+    e.preventDefault();
   }
 
   render() {
     return (
-      <button onClick={this.handleClick}>
-        Reset
-      </button>
+      <a class="waves-effect waves-light btn" onClick={this.handleClick}>Reset</a>
     );
   }
 }
@@ -62,7 +62,9 @@ class ResetButton extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {counter: 0, currency: "p", monthly: 150000};
+    this.state = {counter: 0, currency: "$", monthly: 7500, pow: 1};
+    const pow = Math.pow(10,this.state.monthly.length-6);
+    this.setState({pow: pow});
     this.incr = this.state.monthly * 100 / 30.4 / 24 / 60 / 60;
     this.handleReset = this.handleReset.bind(this);
     this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
@@ -90,7 +92,9 @@ class App extends React.Component {
   
   handleMonthlyChange(monthly) {
     this.setState({monthly: monthly});
-    this.incr = monthly * 100 / 30.4 / 24 / 60 / 60;
+    const pow = monthly.length < 7 ? 1 : Math.pow(10,monthly.length-7) ;
+    this.setState({pow: pow});
+    this.incr = monthly * 100 / 30.4 / 24 / 60 / 60 / pow;
     clearInterval(this.timerID);
     this.timerID = setInterval(
       () => this.tick(),
@@ -100,7 +104,7 @@ class App extends React.Component {
   
   tick() {
     this.setState((prevState) => ({
-      counter: prevState.counter + 1
+      counter: prevState.counter + 1*this.state.pow
     }));
   }
   
@@ -108,10 +112,22 @@ class App extends React.Component {
     return (
       <div class="center-div">
         <Ticker monthly={this.state.monthly} counter={this.state.counter} currency={this.state.currency}/>
-        <span>Ежемесячные расходы: </span>
-        <MonthlyInput monthly={this.state.monthly} onMonthlyChange={this.handleMonthlyChange} />
-        <CurrencyInput currency={this.state.currency} onCurrencyChange={this.handleCurrencyChange} />
-        <ResetButton onClick={this.handleReset}/>
+        <div class="row inputs">
+          <form class="col s12">
+            <div class="input-field col s4 labeldiv">
+              <label>Monthly expences: </label>
+            </div>
+            <div class="input-field col s3">
+              <MonthlyInput monthly={this.state.monthly} onMonthlyChange={this.handleMonthlyChange} />
+            </div>
+            <div class="input-field col s2">
+              <CurrencyInput currency={this.state.currency} onCurrencyChange={this.handleCurrencyChange} />
+            </div>
+            <div class="input-field col s3 buttondiv">
+              <ResetButton onClick={this.handleReset}/>
+            </div>
+          </form>
+        </div>
       </div>
     );
   }
