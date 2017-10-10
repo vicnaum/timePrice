@@ -1,37 +1,9 @@
-## Welcome to GitHub Pages
+What's this?
+Everybody knows what the hourly rate is. Except now let's see how much your free time is worth.
 
-You can use the [editor on GitHub](https://github.com/vicnaum/timePrice/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+The idea is simple - you have some monthly expenses. And if you spend your time doing nothing - you have this debt growing. And you'll have to pay it in the end of the month.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The more expenses you have - the faster your monthly bill grows.
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/vicnaum/timePrice/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Even if you're doing nothing - you'll have to pay for your time.
+P.S. It even grows while you're sleeping!
